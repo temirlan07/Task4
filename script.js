@@ -18,7 +18,7 @@ document.getElementById('checkForm').addEventListener('submit', async function(e
         ]);
 
         if (!studentRes.ok || !buildingRes.ok || !roomRes.ok) {
-            throw new Error("Не удалось получить данные с сервера (проверьте введённые ID и номера)");
+            throw new Error("Не удалось получить данные (проверьте ID или номера)");
         }
 
         const studentData = await studentRes.json();
@@ -31,18 +31,53 @@ document.getElementById('checkForm').addEventListener('submit', async function(e
 
         let errors = [];
 
-        const isNonResident = studentData.isNonResident ?? studentData.is_non_resident ?? studentData.nonResident ?? studentData.isOutsider;
+        const isNonResident = 
+            studentData.isNonResident ?? 
+            studentData.is_non_resident ?? 
+            studentData.nonResident ?? 
+            studentData.is_nonresident ??
+            studentData.outsider ??
+            (studentData.isResident === false) ??
+            (studentData.is_resident === false) ??
+            (studentData.resident === false);
+
         if (isNonResident === false) {
             errors.push("Студент не является иногородним.");
         }
 
-        const isForStudents = buildingData.isForStudents ?? buildingData.is_for_students ?? buildingData.forStudents ?? buildingData.studentsOnly;
+        const isForStudents = 
+            buildingData.isForStudents ?? 
+            buildingData.is_for_students ?? 
+            buildingData.forStudents ?? 
+            buildingData.for_students ??
+            buildingData.studentsOnly ??
+            (buildingData.type && buildingData.type.toLowerCase().includes('student'));
+
         if (isForStudents === false) {
             errors.push("Корпус не предназначен для студентов.");
         }
 
-        const isFree = roomData.isFree ?? roomData.is_free ?? roomData.free ?? (roomData.status === 'free');
-        if (isFree === false) {
+
+        let roomIsFree = true;
+
+        if ('isFree' in roomData) roomIsFree = Boolean(roomData.isFree);
+        else if ('is_free' in roomData) roomIsFree = Boolean(roomData.is_free);
+        else if ('free' in roomData) roomIsFree = Boolean(roomData.free);
+        else if ('isBusy' in roomData) roomIsFree = !roomData.isBusy;
+        else if ('is_busy' in roomData) roomIsFree = !roomData.is_busy;
+        else if ('busy' in roomData) roomIsFree = !roomData.busy;
+        else if ('occupied' in roomData) roomIsFree = !roomData.occupied;
+        else if ('is_occupied' in roomData) roomIsFree = !roomData.is_occupied;
+        else if (typeof roomData.status === 'string') {
+            const st = roomData.status.toLowerCase();
+            roomIsFree = (st === 'free' || st === 'available' || st === 'vacant');
+        } else if (Array.isArray(roomData.students)) {
+            roomIsFree = roomData.students.length === 0;
+        } else if (Array.isArray(roomData.residents)) {
+            roomIsFree = roomData.residents.length === 0;
+        }
+
+        if (!roomIsFree) {
             errors.push("Комната занята.");
         }
 
