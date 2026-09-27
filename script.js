@@ -25,36 +25,12 @@ document.getElementById('checkForm').addEventListener('submit', async function(e
         const buildingData = await buildingRes.json();
         const roomData = await roomRes.json();
 
-        const studentName = studentData.name || studentData.student_name || `Студент #${studentId}`;
-        const isNonResident = 
-            studentData.isNonResident ?? 
-            studentData.is_non_resident ?? 
-            studentData.nonResident ?? 
-            studentData.outsider ?? 
-            (studentData.isResident === false) ?? 
-            (studentData.is_resident === false) ?? 
-            (studentData.resident === false);
+        const studentName = studentData.name || `Студент #${studentId}`;
+        const isNonResident = studentData.resident === false;
 
-        const isForStudents = 
-            buildingData.isForStudents ?? 
-            buildingData.is_for_students ?? 
-            buildingData.forStudents ?? 
-            (buildingData.type && buildingData.type.toLowerCase().includes('student'));
+        const isForStudents = Boolean(buildingData.forStudents);
 
-        let roomIsFree = true;
-        if ('isFree' in roomData) roomIsFree = Boolean(roomData.isFree);
-        else if ('is_free' in roomData) roomIsFree = Boolean(roomData.is_free);
-        else if ('free' in roomData) roomIsFree = Boolean(roomData.free);
-        else if ('isBusy' in roomData) roomIsFree = !roomData.isBusy;
-        else if ('is_busy' in roomData) roomIsFree = !roomData.is_busy;
-        else if ('busy' in roomData) roomIsFree = !roomData.busy;
-        else if ('occupied' in roomData) roomIsFree = !roomData.occupied;
-        else if (typeof roomData.status === 'string') {
-            const st = roomData.status.toLowerCase();
-            roomIsFree = (st === 'free' || st === 'available' || st === 'vacant');
-        } else if (Array.isArray(roomData.students)) {
-            roomIsFree = roomData.students.length === 0;
-        }
+        const roomIsFree = Boolean(roomData.available);
 
         const studentStatusText = isNonResident 
             ? `[+] СТУДЕНТ: ${studentName} является иногородним`
@@ -116,36 +92,12 @@ document.getElementById('checkForm').addEventListener('submit', async function(e
         const buildingData = await buildingRes.json();
         const roomData = await roomRes.json();
 
-        const studentName = studentData.name || studentData.student_name || `Студент #${studentId}`;
-        const isNonResident = 
-            studentData.isNonResident ?? 
-            studentData.is_non_resident ?? 
-            studentData.nonResident ?? 
-            studentData.outsider ?? 
-            (studentData.isResident === false) ?? 
-            (studentData.is_resident === false) ?? 
-            (studentData.resident === false);
+        const studentName = studentData.name || `Студент #${studentId}`;
+        const isNonResident = studentData.resident === false;
 
-        const isForStudents = 
-            buildingData.isForStudents ?? 
-            buildingData.is_for_students ?? 
-            buildingData.forStudents ?? 
-            (buildingData.type && buildingData.type.toLowerCase().includes('student'));
+        const isForStudents = Boolean(buildingData.forStudents);
 
-        let roomIsFree = true;
-        if ('isFree' in roomData) roomIsFree = Boolean(roomData.isFree);
-        else if ('is_free' in roomData) roomIsFree = Boolean(roomData.is_free);
-        else if ('free' in roomData) roomIsFree = Boolean(roomData.free);
-        else if ('isBusy' in roomData) roomIsFree = !roomData.isBusy;
-        else if ('is_busy' in roomData) roomIsFree = !roomData.is_busy;
-        else if ('busy' in roomData) roomIsFree = !roomData.busy;
-        else if ('occupied' in roomData) roomIsFree = !roomData.occupied;
-        else if (typeof roomData.status === 'string') {
-            const st = roomData.status.toLowerCase();
-            roomIsFree = (st === 'free' || st === 'available' || st === 'vacant');
-        } else if (Array.isArray(roomData.students)) {
-            roomIsFree = roomData.students.length === 0;
-        }
+        const roomIsFree = Boolean(roomData.available);
 
         const studentStatusText = isNonResident 
             ? `[+] СТУДЕНТ: ${studentName} является иногородним`
@@ -207,36 +159,12 @@ document.getElementById('checkForm').addEventListener('submit', async function(e
         const buildingData = await buildingRes.json();
         const roomData = await roomRes.json();
 
-        const studentName = studentData.name || studentData.student_name || `Студент #${studentId}`;
-        const isNonResident = 
-            studentData.isNonResident ?? 
-            studentData.is_non_resident ?? 
-            studentData.nonResident ?? 
-            studentData.outsider ?? 
-            (studentData.isResident === false) ?? 
-            (studentData.is_resident === false) ?? 
-            (studentData.resident === false);
+        const studentName = studentData.name || `Студент #${studentId}`;
+        const isNonResident = studentData.resident === false;
 
-        const isForStudents = 
-            buildingData.isForStudents ?? 
-            buildingData.is_for_students ?? 
-            buildingData.forStudents ?? 
-            (buildingData.type && buildingData.type.toLowerCase().includes('student'));
+        const isForStudents = Boolean(buildingData.forStudents);
 
-        let roomIsFree = true;
-        if ('isFree' in roomData) roomIsFree = Boolean(roomData.isFree);
-        else if ('is_free' in roomData) roomIsFree = Boolean(roomData.is_free);
-        else if ('free' in roomData) roomIsFree = Boolean(roomData.free);
-        else if ('isBusy' in roomData) roomIsFree = !roomData.isBusy;
-        else if ('is_busy' in roomData) roomIsFree = !roomData.is_busy;
-        else if ('busy' in roomData) roomIsFree = !roomData.busy;
-        else if ('occupied' in roomData) roomIsFree = !roomData.occupied;
-        else if (typeof roomData.status === 'string') {
-            const st = roomData.status.toLowerCase();
-            roomIsFree = (st === 'free' || st === 'available' || st === 'vacant');
-        } else if (Array.isArray(roomData.students)) {
-            roomIsFree = roomData.students.length === 0;
-        }
+        const roomIsFree = Boolean(roomData.available);
 
         const studentStatusText = isNonResident 
             ? `[+] СТУДЕНТ: ${studentName} является иногородним`
@@ -298,36 +226,12 @@ document.getElementById('checkForm').addEventListener('submit', async function(e
         const buildingData = await buildingRes.json();
         const roomData = await roomRes.json();
 
-        const studentName = studentData.name || studentData.student_name || `Студент #${studentId}`;
-        const isNonResident = 
-            studentData.isNonResident ?? 
-            studentData.is_non_resident ?? 
-            studentData.nonResident ?? 
-            studentData.outsider ?? 
-            (studentData.isResident === false) ?? 
-            (studentData.is_resident === false) ?? 
-            (studentData.resident === false);
+        const studentName = studentData.name || `Студент #${studentId}`;
+        const isNonResident = studentData.resident === false;
 
-        const isForStudents = 
-            buildingData.isForStudents ?? 
-            buildingData.is_for_students ?? 
-            buildingData.forStudents ?? 
-            (buildingData.type && buildingData.type.toLowerCase().includes('student'));
+        const isForStudents = Boolean(buildingData.forStudents);
 
-        let roomIsFree = true;
-        if ('isFree' in roomData) roomIsFree = Boolean(roomData.isFree);
-        else if ('is_free' in roomData) roomIsFree = Boolean(roomData.is_free);
-        else if ('free' in roomData) roomIsFree = Boolean(roomData.free);
-        else if ('isBusy' in roomData) roomIsFree = !roomData.isBusy;
-        else if ('is_busy' in roomData) roomIsFree = !roomData.is_busy;
-        else if ('busy' in roomData) roomIsFree = !roomData.busy;
-        else if ('occupied' in roomData) roomIsFree = !roomData.occupied;
-        else if (typeof roomData.status === 'string') {
-            const st = roomData.status.toLowerCase();
-            roomIsFree = (st === 'free' || st === 'available' || st === 'vacant');
-        } else if (Array.isArray(roomData.students)) {
-            roomIsFree = roomData.students.length === 0;
-        }
+        const roomIsFree = Boolean(roomData.available);
 
         const studentStatusText = isNonResident 
             ? `[+] СТУДЕНТ: ${studentName} является иногородним`
